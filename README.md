@@ -1,20 +1,93 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+SmartHire – AI Powered Job Portal
 
-# Run and deploy your AI Studio app
+SmartHire is a modern AI-powered Job Portal built using the MERN Stack (MongoDB, Express.js, React.js, Node.js). It connects job seekers with recruiters through intelligent job matching, resume analysis, and streamlined hiring workflows.
 
-This contains everything you need to run your app locally.
+Designed with a beautiful, responsive UI and AI-driven features, SmartHire simplifies the recruitment process for candidates, recruiters, and administrators.
 
-View your app in AI Studio: https://ai.studio/apps/3c9197b8-a3fa-41f0-ab94-17cdc731cc0a
+🌟 Features
+👨‍💼 Candidate Features
+Secure User Authentication (JWT)
+Create & Manage Profile
+Upload Resume
+Search & Apply for Jobs
+Save Favorite Jobs
+Track Application Status
+AI-Based Job Recommendations
+Resume Strength Analysis
+AI Career Guidance Chatbot
+🏢 Recruiter Features
+Recruiter Registration & Login
+Post New Job Openings
+Manage Job Listings
+View & Filter Applicants
+Shortlist Candidates
+Track Hiring Progress
+Analytics Dashboard
+🛡️ Admin Features
+Manage Users & Recruiters
+Approve Recruiter Accounts
+Monitor Platform Activity
+View Analytics Dashboard
+Manage Job Listings
+Platform Performance Insights
+🤖 AI-Powered Features
+AI Job Recommendation Engine
 
-## Run Locally
+SmartHire analyzes:
 
-**Prerequisites:**  Node.js
+Skills
+Experience
+Education
+Interests
 
+And provides:
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Personalized Job Matches
+Match Score Percentage
+Career Growth Suggestions
+AI Resume Analyzer
+
+Provides:
+
+ATS Compatibility Score
+Missing Skills Detection
+Resume Improvement Suggestions
+Keyword Optimization Tips
+AI Career Coach
+
+Interactive chatbot that helps users with:
+
+Career Planning
+Resume Writing
+Interview Preparation
+Skill Development Suggestions
+🎨 Modern UI/UX
+Beautiful SaaS Dashboard
+Colorful Analytics Cards
+Glassmorphism Design
+Dark & Light Mode
+Fully Responsive Layout
+Smooth Animations
+Mobile Friendly Design
+Interactive Charts & Graphs
+🛠️ Tech Stack
+Frontend
+React.js
+Vite
+Tailwind CSS
+React Router
+Framer Motion
+React Query
+Recharts
+Backend
+Node.js
+Express.js
+Database
+MongoDB Atlas
+Authentication
+JWT Authentication
+Role-Based Authorization
+AI Integration
+Gemini API / OpenAI API
+Cloud Services
+Cloudinary (Resume Storage
