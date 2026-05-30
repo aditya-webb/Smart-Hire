@@ -1,0 +1,6 @@
+{
+  "name": "SmartHire AI",
+  "description": "An AI-powered SaaS recruitment platform where candidates discover jobs, recruiters manage talent pipelines, and AI matches both automatically.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

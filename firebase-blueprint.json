@@ -1,0 +1,149 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "SmartHire core system user profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique user ID" },
+        "email": { "type": "string", "format": "email", "description": "Verified user email" },
+        "name": { "type": "string", "description": "User display name" },
+        "role": { "type": "string", "enum": ["candidate", "recruiter", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "isVerified": { "type": "boolean" },
+        "avatarUrl": { "type": "string" },
+        "bio": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "suspended"] }
+      },
+      "required": ["id", "email", "name", "role", "createdAt", "isVerified", "status"]
+    },
+    "CandidateProfile": {
+      "title": "CandidateProfile",
+      "description": "In-depth candidate work resume metadata and education logs",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "email": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "location": { "type": "string" },
+        "skills": { "type": "array" },
+        "education": { "type": "array" },
+        "experience": { "type": "array" },
+        "projects": { "type": "array" },
+        "certifications": { "type": "array" },
+        "profileCompleteMeter": { "type": "integer" }
+      },
+      "required": ["userId", "fullName", "email", "skills", "profileCompleteMeter"]
+    },
+    "Job": {
+      "title": "Job",
+      "description": "Enterprise job requirements and details board",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "companyName": { "type": "string" },
+        "description": { "type": "string" },
+        "requirements": { "type": "array" },
+        "responsibilities": { "type": "array" },
+        "location": { "type": "string" },
+        "type": { "type": "string", "enum": ["remote", "hybrid", "on-site"] },
+        "salaryMin": { "type": "number" },
+        "salaryMax": { "type": "number" },
+        "salaryCurrency": { "type": "string" },
+        "experienceLevel": { "type": "string", "enum": ["entry", "mid", "senior", "lead"] },
+        "category": { "type": "string" },
+        "tags": { "type": "array" },
+        "status": { "type": "string", "enum": ["draft", "published", "archived"] },
+        "recruiterId": { "type": "string" },
+        "numApplications": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "companyName", "description", "location", "type", "experienceLevel", "status", "recruiterId"]
+    },
+    "Application": {
+      "title": "Application",
+      "description": "Job application Kanban tracking entity",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "jobId": { "type": "string" },
+        "candidateId": { "type": "string" },
+        "status": { "type": "string", "enum": ["applied", "under-review", "shortlisted", "interview", "selected", "rejected"] },
+        "appliedAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "matchScore": { "type": "integer" },
+        "compatibilityScore": { "type": "integer" },
+        "skillGapAnalysis": { "type": "array" },
+        "coverLetter": { "type": "string" },
+        "recruiterNotes": { "type": "string" }
+      },
+      "required": ["id", "jobId", "candidateId", "status", "appliedAt", "updatedAt"]
+    },
+    "Interview": {
+      "title": "Interview",
+      "description": "Video conference or on-site selection logs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "applicationId": { "type": "string" },
+        "candidateId": { "type": "string" },
+        "recruiterId": { "type": "string" },
+        "jobId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "dateTime": { "type": "string", "format": "date-time" },
+        "type": { "type": "string", "enum": ["virtual", "on-site"] },
+        "status": { "type": "string", "enum": ["scheduled", "completed", "cancelled"] },
+        "meetingLink": { "type": "string" },
+        "duration": { "type": "integer" }
+      },
+      "required": ["id", "applicationId", "candidateId", "recruiterId", "dateTime", "type", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "System push flags and portal updates",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string", "enum": ["info", "interview", "application", "message"] },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "title", "message", "type", "isRead", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "System access, roles and preferences records"
+    },
+    "/profiles/{userId}": {
+      "schema": { "$ref": "#/entities/CandidateProfile" },
+      "description": "Work details, summaries, and technologies checklist for candidates"
+    },
+    "/jobs/{jobId}": {
+      "schema": { "$ref": "#/entities/Job" },
+      "description": "Posted listings board containing company meta, stack keywords and salaries"
+    },
+    "/applications/{applicationId}": {
+      "schema": { "$ref": "#/entities/Application" },
+      "description": "Hiring progression boards mapping users to corporate options"
+    },
+    "/interviews/{interviewId}": {
+      "schema": { "$ref": "#/entities/Interview" },
+      "description": "Calender schedules with conference links"
+    },
+    "/notifications/{notifId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "Visual alerts indexing application and message updates"
+    }
+  }
+}

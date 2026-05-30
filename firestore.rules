@@ -1,0 +1,87 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Default Deny Gateway
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // 1. Users Collection
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId) 
+        && request.resource.data.role in ['candidate', 'recruiter']
+        && request.resource.data.status == 'active';
+      allow update: if isOwner(userId)
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.status == resource.data.status;
+    }
+
+    // 2. Candidate Resume Profile
+    match /profiles/{userId} {
+      allow read: if isSignedIn();
+      allow create, write: if isOwner(userId);
+    }
+
+    // 3. Corporate jobs list
+    match /jobs/{jobId} {
+      allow read: if true; // anyone can discover open jobs
+      allow create: if isSignedIn() 
+        && isValidId(jobId)
+        && request.resource.data.recruiterId == request.auth.uid;
+      allow update, delete: if isSignedIn()
+        && resource.data.recruiterId == request.auth.uid;
+    }
+
+    // 4. Position Application records
+    match /applications/{applicationId} {
+      allow read: if isSignedIn() 
+        && (resource.data.candidateId == request.auth.uid 
+            || resource.data.recruiterId == request.auth.uid);
+      
+      allow create: if isSignedIn()
+        && isValidId(applicationId)
+        && request.resource.data.candidateId == request.auth.uid
+        && request.resource.data.status == 'applied';
+      
+      allow update: if isSignedIn()
+        && (
+          // Candidate can update cover letter but not review status
+          (resource.data.candidateId == request.auth.uid 
+            && request.resource.data.status == resource.data.status)
+          ||
+          // Recruiter is allowed to change applicant Kanban statuses and add comments
+          (resource.data.recruiterId == request.auth.uid)
+        );
+    }
+
+    // 5. Calendar interviews registry
+    match /interviews/{interviewId} {
+      allow read: if isSignedIn()
+        && (resource.data.candidateId == request.auth.uid 
+            || resource.data.recruiterId == request.auth.uid);
+      allow create, update, delete: if isSignedIn()
+        && request.auth.uid == request.resource.data.recruiterId;
+    }
+
+    // 6. User Notifications Collection
+    match /notifications/{notifId} {
+      allow read, update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn(); // allow system interactions trigger alerts
+    }
+  }
+}
